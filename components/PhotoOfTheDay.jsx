@@ -80,7 +80,7 @@ export default function PhotoOfTheDay() {
             </div>
             {/* Right Section: Image and Title */}
             <div className="group relative flex flex-col items-center lg:w-1/2">
-            <div className="group flex items-center justify-center relative size-full bg-darkest pb-4 pt-3 ">
+            <div className="group flex items-center justify-center relative bg-darkest pb-4 pt-3 ">
               <Image
                 src={post.image.asset.url}
                 alt={post.title}
@@ -88,7 +88,7 @@ export default function PhotoOfTheDay() {
                 height={450}
                 className=" shadow-lg"
               />
-              <a href={post?.insta} target="_blank" rel="noopener noreferrer" className="absolute bottom-7 right-0 w-44 bg-black/70 p-2 text-center opacity-0 transition-opacity duration-1000 group-hover:opacity-100">
+              <a href={post?.insta} target="_blank" rel="noopener noreferrer" className="absolute bottom-7 right-0  w-44 bg-black/70 p-2 text-center opacity-0 transition-opacity duration-1000 group-hover:opacity-100">
                 Shot By:<br/> @{post.ShotBy}
               </a>
               </div>

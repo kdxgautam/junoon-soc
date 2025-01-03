@@ -14,8 +14,8 @@ const client = new Client()
   .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID);
 
 const databases = new Databases(client);
-const DATABASE_ID = process.env.NEXT_PUBLIC_DATABASE_ID
-const COLLECTION_ID = process.env.NEXT_PUBLIC_COLLECTION_ID
+const DATABASE_ID = process.env.NEXT_PUBLIC_DATABASE_ID;
+const COLLECTION_ID = process.env.NEXT_PUBLIC_COLLECTION_ID;
 
 const contactSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -39,18 +39,12 @@ const ContactUsForm = () => {
     Message: "",
   });
 
-  const [typingTimeout, setTypingTimeout] = useState(null);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
 
     setFormData((prevData) => ({ ...prevData, [name]: value }));
 
-    if (typingTimeout) {
-      clearTimeout(typingTimeout);
-    }
-
-    setTypingTimeout(setTimeout(() => validateField(name, value), 500));
+    validateField(name, value);
   };
 
   const validateField = (name, value) => {
@@ -59,7 +53,7 @@ const ContactUsForm = () => {
 
     setErrors((prevErrors) => ({
       ...prevErrors,
-      [name]: validation.success ? "" : validation.error.errors[0].Message,
+      [name]: validation.success ? "" : validation.error.issues[0].message,
     }));
   };
 
@@ -82,34 +76,30 @@ const ContactUsForm = () => {
     setErrors({ name: "", email: "", PhoneNo: "", Message: "" });
 
     try {
-      await databases.createDocument(
-        DATABASE_ID,
-        COLLECTION_ID,
-        "unique()",
-        formData,
-      );
+      await databases.createDocument(DATABASE_ID, COLLECTION_ID, "unique()", formData);
 
       setFormData({ name: "", email: "", PhoneNo: "", Message: "" });
       toast.success("Your message has been Sent Successfully!", {
         hideProgressBar: true,
         closeOnClick: true,
         position: "top-center",
-
         theme: "dark",
         transition: "Slide",
       });
     } catch (error) {
       console.error("Error submitting form:", error);
-      alert("An error occurred. Please try again later.");
+      toast.error("An error occurred. Please try again later.", {
+        hideProgressBar: true,
+        closeOnClick: true,
+        position: "top-center",
+        theme: "dark",
+      });
     }
   };
 
   return (
     <div className="mx-auto grid max-w-xl items-start gap-8 p-4 font-[sans-serif]">
-
       <div className="sm:col-span-1">
-        {errors.error && <p className="text-sm text-red-500">{errors.error}</p>}
-
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <input
@@ -120,9 +110,7 @@ const ContactUsForm = () => {
               placeholder="Your Name"
               className="w-full rounded-md border border-[#ccc] bg-[#f4f4f4] p-3 text-neutral-600"
             />
-            {errors.name && (
-              <p className="text-sm text-red-500">{errors.name}</p>
-            )}
+            {errors.name && <p className="text-sm text-red-500">{errors.name}</p>}
           </div>
           <div className="mb-4">
             <input
@@ -133,9 +121,7 @@ const ContactUsForm = () => {
               placeholder="Your Email"
               className="w-full rounded-md border border-[#ccc] bg-[#f4f4f4] p-3 text-neutral-600"
             />
-            {errors.email && (
-              <p className="text-sm text-red-500">{errors.email}</p>
-            )}
+            {errors.email && <p className="text-sm text-red-500">{errors.email}</p>}
           </div>
           <div className="mb-4">
             <input
@@ -146,9 +132,7 @@ const ContactUsForm = () => {
               placeholder="Phone No."
               className="w-full rounded-md border border-[#ccc] bg-[#f4f4f4] p-3 text-neutral-600 shadow-lg"
             />
-            {errors.PhoneNo && (
-              <p className="text-sm text-red-500">{errors.PhoneNo}</p>
-            )}
+            {errors.PhoneNo && <p className="text-sm text-red-500">{errors.PhoneNo}</p>}
           </div>
           <div className="mb-4">
             <textarea
@@ -159,9 +143,7 @@ const ContactUsForm = () => {
               className="w-full rounded-md border border-[#ccc] bg-[#f4f4f4] p-3 text-neutral-600"
               rows="4"
             ></textarea>
-            {errors.Message && (
-              <p className="text-sm text-red-500">{errors.Message}</p>
-            )}
+            {errors.Message && <p className="text-sm text-red-500">{errors.Message}</p>}
           </div>
           <button
             type="submit"
