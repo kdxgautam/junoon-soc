@@ -80,7 +80,7 @@ export default function PhotoOfTheDay() {
             </div>
             {/* Right Section: Image and Title */}
             <div className="group relative flex flex-col items-center lg:w-1/2">
-            <div className="group relative size-full bg-darkest pb-6 pt-3 ">
+            <div className="group flex items-center justify-center relative size-full bg-darkest pb-4 pt-3 ">
               <Image
                 src={post.image.asset.url}
                 alt={post.title}
